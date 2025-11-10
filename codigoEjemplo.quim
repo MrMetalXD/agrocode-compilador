@@ -1,0 +1,12 @@
+EXPERIMENTO ReaccionAgua
+
+ELEMENTO H = "Hidrogeno"
+ELEMENTO O = "Oxigeno"
+
+SI (temperatura < 100) {
+    COMBINAR(H, H, O)
+    IMPRIMIR("Se formó agua (H2O)")
+}
+FIN_SI
+
+FIN_EXPERIMENTO
