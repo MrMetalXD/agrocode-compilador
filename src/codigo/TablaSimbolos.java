@@ -10,68 +10,76 @@ import java.util.*;
  * @author alanc
  */
 public class TablaSimbolos {
-    private final Set<String> reservadas = new HashSet<>(Arrays.asList( 
-   "si", "entonces", "sino", "fin_si",
-    "mientras", "hacer", "fin_mientras",
-    "para", "cada", "en", "fin_para",
-    "intentar", "capturar", "fin_intentar",
-    "retornar", "romper", "continuar",
-    "configuracion", "fin_configuracion",
-    "rutinas", "fin_rutinas",
-    "principal", "fin_principal",
-    "rutina", "fin_rutina", "fin",
-    "sensor", "actuador", "zona",
-    "tipo_numero", "tipo_logico", "tipo_texto",
-    "nulo", "rango_tiempo","verdadero", "falso",
-    "regar", "fertilizar", "ventilar",
-    "calefaccionar", "iluminar","rociar_plaguicida",
-    "activar", "desactivar", "ajustar_potencia",
-    "leer", "promedio", "max", "min", "enviar_alerta",
-    "ahora", "de", "a", "esperar", "duracion",
-    "op_igual_igual", "op_diferente",
-    "op_menor_igual", "op_mayor_igual",
-    "op_menor", "op_mayor", "op_asignacion",
-    "op_logico_not", "op_logico_and", "op_logico_or",
-    "op_suma", "op_resta", "op_multiplicacion", "op_division",
-    "paren_abre", "paren_cierra",
-    "llave_abre", "llave_cierra",
-    "corchete_abre", "corchete_cierra",
-    "coma", "dos_puntos","lit_temp_celsius", "lit_temp_farenheit",
-    "lit_humedad_relativa", "lit_humedad_suelo",
-    "lit_volumen_ml", "lit_volumen_l",
-    "lit_tiempo_s", "lit_tiempo_min", "lit_tiempo_hrs",
-    "ilu_lux", "ilu_ppdf",
-    "error_identificador_es_palabra_reservada",
-    "lit_num", "identificador",
-    "error", "error_cadena_no_cerrada", "error_caracter_invalido"
-    ));
-    
-    private final Map<String, Simbolo> ids = new LinkedHashMap<>();
-    
-    // Verifica si la cadena coincide con una palabra reservada
-    public boolean esReservada(String lexema) {
-        return lexema != null && reservadas.contains(normaliza(lexema));
-    }
-    
- 
-    
-    // Agrega palabras reservadas
-    public void agregarReservadas(Collection<String> nuevas){
-        if (nuevas == null) {
-            return;
+    public static class EntradaIdentificador {
+        private final String nombre;
+        private final int linea;
+        private final int columna;
+        
+        public EntradaIdentificador(String nombre, int linea, int columna){
+            this.nombre = nombre;
+            this.linea = linea;
+            this.columna = columna;
         }
         
-        for (String s : nuevas){
-            if (s != null) reservadas.add(normaliza(s));
+        public String getNombre(){
+            return nombre;
         }
+        
+        public int getLinea(){
+            return linea;
+        }
+        
+        public int getColumna(){
+            return columna;
+        }
+        
+        public String toString(){
+            return nombre + "(" + linea + ", " + columna + ")";
+        }
+    }
+    
+    private final Map<String, EntradaIdentificador> identificadores = new LinkedHashMap<>();
+    
+    private static final Set<String> PALABRAS_RESERVADAS = new HashSet<>(Arrays.asList("SI","SINO","FIN_SI",
+            "MIENTRAS","FIN_MIENTRAS",
+            "PARA","FIN_PARA","REPETIR","VECES","FIN_REPETIR",
+            "ESPERAR","FUNCION","RETORNAR","IMPRIMIR","LEER","ALEATORIO",
+            "EXPERIMENTO","FIN_EXPERIMENTO","BLOQUE","FIN_BLOQUE",
+            "IMPORTAR","PAQUETE","USAR","CONSTANTE","VARIABLE",
+            "ELEMENTO","COMPUESTO","MEZCLA","CANTIDAD","MOLES","GRAMOS",
+            "LITROS","ESTADO","SOLIDO","LIQUIDO","GAS","ACUOSO","PUREZA",
+            "CONCENTRACION","MOLARIDAD","CREAR","ELIMINAR","LIMPIAR","COMBINAR","AGREGAR","DISOLVER",
+            "PRECIPITAR","EVAPORAR","DESTILAR","FILTRAR","TITULAR",
+            "USAR_CATALIZADOR","AJUSTAR_TEMPERATURA","AJUSTAR_PRESION",
+            "AGITAR","CALENTAR","ENFRIAR","ANOTAR",
+            "GENERAR_REPORTE","EXPORTAR","GUARDAR","CARGAR",
+            "EXPLICAR_REACCION","ADVERTIR","RUBRICA","PUNTUACION",
+            "INFO","MASA_MOLAR","BALANCEAR","TIPO_REACCION",
+            "ENERGIA_REACCION","ENTALPIA","ENTROPIA","GIBBS",
+            "PREDICIR_PRODUCTO","EQUILIBRIO","PKA","PH","ESTEQUIOMETRIA",
+            "REACTIVO_LIMITANTE",
+            "NUMERO","CADENA","BOOLEANO","LISTA","MAPA",
+            "VERDADERO","FALSO","NULO"));
+    
+    public boolean esReservada(String lexema) {
+        if (lexema == null) return false;
+        // si quieres que sea insensible a mayúsculas:
+        return PALABRAS_RESERVADAS.contains(lexema.toUpperCase());
+    }
+    
+    public void registrarIdentificador(String nombre, int linea, int columna) {
+        if (nombre == null || nombre.isEmpty()) return;
+        if (esReservada(nombre)) return; // por si acaso
+
+        if (!identificadores.containsKey(nombre)) {
+            identificadores.put(nombre, new EntradaIdentificador(nombre, linea, columna));
+        }
+        // Si quisieras llevar una lista de apariciones, aquí podrías ampliarlo,
+        // pero eso ya sería más de léxico.
+    }
+    
+    public EntradaIdentificador buscar(String nombre) {
+        return identificadores.get(nombre);
     }
    
-       
-    private static String normaliza(String s) {
-        return s.toLowerCase(Locale.ROOT);
-    }
-    
-    public static final class Simbolo {
-        
-    }
 }
