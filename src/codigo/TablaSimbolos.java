@@ -14,11 +14,15 @@ public class TablaSimbolos {
         private final String nombre;
         private final int linea;
         private final int columna;
+        private String tipo; 
+        private int direccionMemoria;
         
         public EntradaIdentificador(String nombre, int linea, int columna){
             this.nombre = nombre;
             this.linea = linea;
             this.columna = columna;
+            this.tipo = "desconocido";
+            this.direccionMemoria = -1;
         }
         
         public String getNombre(){
@@ -31,6 +35,21 @@ public class TablaSimbolos {
         
         public int getColumna(){
             return columna;
+        }
+        
+        public String getTipo() {
+            return tipo;
+        }
+
+        public void setTipo(String tipo) {
+            this.tipo = tipo;
+        }
+        
+        public int getDireccionMemoria() {
+            return direccionMemoria;
+        }
+        public void setDireccionMemoria(int direccionMemoria) {
+            this.direccionMemoria = direccionMemoria;
         }
         
         public String toString(){
@@ -60,6 +79,11 @@ public class TablaSimbolos {
             "REACTIVO_LIMITANTE",
             "NUMERO","CADENA","BOOLEANO","LISTA","MAPA",
             "VERDADERO","FALSO","NULO"));
+    
+    public Map<String, EntradaIdentificador> getIdentificadores() {
+        // Devolvemos una copia para que la GUI no pueda modificar la tabla original
+        return java.util.Collections.unmodifiableMap(identificadores);
+    }
     
     public boolean esReservada(String lexema) {
         if (lexema == null) return false;

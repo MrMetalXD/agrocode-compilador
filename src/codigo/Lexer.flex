@@ -10,6 +10,10 @@ import static codigo.Tokens.*;
 %{
     private final TablaSimbolos tablaSimbolos = new TablaSimbolos();
     
+    public TablaSimbolos getTablaSimbolos() {
+        return this.tablaSimbolos;
+    }
+
     private Tokens token(String lex, String comp, int li, int c){
         return new Tokens(lex, comp, li+1, c+1); 
     }

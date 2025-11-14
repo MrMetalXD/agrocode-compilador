@@ -25,7 +25,7 @@ public class Compilador extends javax.swing.JFrame {
     private boolean cambiosSinGuardar = false;
     private boolean actualizandoTexto = false;
     public String rute="";
-    
+    private TablaSimbolos tablaDeSimbolosGlobal;
     //Variable para la imagen de fondo
     FondoPanel fondo = new FondoPanel();
 
@@ -171,6 +171,7 @@ public class Compilador extends javax.swing.JFrame {
     }
     
     private void ejecutarAnalisisLexico(){
+        this.tablaDeSimbolosGlobal = null;
         try {
             String codigo = jCode.getText();
             Reader lector = new BufferedReader(new StringReader(codigo));
@@ -205,6 +206,8 @@ public class Compilador extends javax.swing.JFrame {
                     tokens.addRow(new Object[]{ linea, lexema, compLexico});
                 }
             }
+            
+            this.tablaDeSimbolosGlobal = lexer.getTablaSimbolos();
 
             // Mostrar los resultados en una ventana aparte
             JTable tablaTokens = new JTable(tokens);
@@ -233,6 +236,49 @@ public class Compilador extends javax.swing.JFrame {
         
     }
     
+    private void VerTablaIdentificadores(){
+        // veremos si el análisis léxico ya se ejecutó
+    if (this.tablaDeSimbolosGlobal == null) {
+        JOptionPane.showMessageDialog(this, 
+            "Debe ejecutar el 'Analizador Léxico' primero.", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return; // Detiene el método para evitar el crash
+    }
+
+    // se hace en un Jtable
+    String[] columnas = {"Identificador", "Tipo", "Línea", "Columna", "Dir. Memoria"}; 
+    javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(columnas, 0);
+
+    //obtenemos el mapa de identificadores
+    java.util.Map<String, TablaSimbolos.EntradaIdentificador> identificadores = 
+        tablaDeSimbolosGlobal.getIdentificadores();
+
+    //Llena el modelo con los datos
+    for (TablaSimbolos.EntradaIdentificador entrada : identificadores.values()) {
+        // Formateamos la dirección para que se vea bien
+        String dirMemoriaStr = (entrada.getDireccionMemoria() == -1) 
+                                ? "N/A" // Si es -1, muestra N/A
+                                : String.valueOf(entrada.getDireccionMemoria()); // Si no, muestra el número
+        model.addRow(new Object[]{
+            entrada.getNombre(),
+            entrada.getTipo(), 
+            entrada.getLinea(),
+            entrada.getColumna(),
+            dirMemoriaStr 
+        });
+    }
+
+    //Crea y muestra la ventana (JDialog) con la tabla
+    javax.swing.JTable tablaGUI = new javax.swing.JTable(model);
+    javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(tablaGUI);
+    javax.swing.JDialog dialogoTabla = new javax.swing.JDialog(this, "Tabla de Símbolos (Identificadores)", true);
+    
+    dialogoTabla.add(scrollPane);
+    dialogoTabla.setSize(600, 400);
+    dialogoTabla.setLocationRelativeTo(this); // Centra la ventana
+    dialogoTabla.setVisible(true); // Muestra la ventana        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -408,7 +454,7 @@ public class Compilador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
+    VerTablaIdentificadores();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
