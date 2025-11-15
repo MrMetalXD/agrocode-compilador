@@ -2,6 +2,7 @@
 package codigo;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.*;
@@ -42,8 +43,10 @@ public class Compilador extends javax.swing.JFrame {
     private void inicializar(){
         //Codigo para implementar el numero de linea
         NumeroLinea numerolinea = new NumeroLinea(jCode);
+        numerolinea.setForeground(Color.WHITE);
         jScrollPane1.setRowHeaderView(numerolinea);
         jCode.setEditable(true);
+        
         
         jCode.getDocument().addDocumentListener(new DocumentListener(){
             @Override
@@ -237,47 +240,48 @@ public class Compilador extends javax.swing.JFrame {
     }
     
     private void VerTablaIdentificadores(){
+        
         // veremos si el análisis léxico ya se ejecutó
-    if (this.tablaDeSimbolosGlobal == null) {
-        JOptionPane.showMessageDialog(this, 
-            "Debe ejecutar el 'Analizador Léxico' primero.", 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-        return; // Detiene el método para evitar el crash
-    }
+        if (this.tablaDeSimbolosGlobal == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Debe ejecutar el 'Analizador Léxico' primero.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return; // Detiene el método para evitar el crash
+        }
 
-    // se hace en un Jtable
-    String[] columnas = {"Identificador", "Tipo", "Línea", "Columna", "Dir. Memoria"}; 
-    javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(columnas, 0);
+        // se hace en un Jtable
+        String[] columnas = {"Identificador", "Tipo", "Línea", "Columna", "Dir. Memoria"}; 
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(columnas, 0);
 
-    //obtenemos el mapa de identificadores
-    java.util.Map<String, TablaSimbolos.EntradaIdentificador> identificadores = 
-        tablaDeSimbolosGlobal.getIdentificadores();
+        //obtenemos el mapa de identificadores
+        java.util.Map<String, TablaSimbolos.EntradaIdentificador> identificadores = 
+            tablaDeSimbolosGlobal.getIdentificadores();
 
-    //Llena el modelo con los datos
-    for (TablaSimbolos.EntradaIdentificador entrada : identificadores.values()) {
-        // Formateamos la dirección para que se vea bien
-        String dirMemoriaStr = (entrada.getDireccionMemoria() == -1) 
-                                ? "N/A" // Si es -1, muestra N/A
-                                : String.valueOf(entrada.getDireccionMemoria()); // Si no, muestra el número
-        model.addRow(new Object[]{
-            entrada.getNombre(),
-            entrada.getTipo(), 
-            entrada.getLinea(),
-            entrada.getColumna(),
-            dirMemoriaStr 
-        });
-    }
+        //Llena el modelo con los datos
+        for (TablaSimbolos.EntradaIdentificador entrada : identificadores.values()) {
+            // Formateamos la dirección para que se vea bien
+            String dirMemoriaStr = (entrada.getDireccionMemoria() == -1) 
+                                    ? "N/A" // Si es -1, muestra N/A
+                                    : String.valueOf(entrada.getDireccionMemoria()); // Si no, muestra el número
+            model.addRow(new Object[]{
+                entrada.getNombre(),
+                entrada.getTipo(), 
+                entrada.getLinea(),
+                entrada.getColumna(),
+                dirMemoriaStr 
+            });
+        }
 
-    //Crea y muestra la ventana (JDialog) con la tabla
-    javax.swing.JTable tablaGUI = new javax.swing.JTable(model);
-    javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(tablaGUI);
-    javax.swing.JDialog dialogoTabla = new javax.swing.JDialog(this, "Tabla de Símbolos (Identificadores)", true);
-    
-    dialogoTabla.add(scrollPane);
-    dialogoTabla.setSize(600, 400);
-    dialogoTabla.setLocationRelativeTo(this); // Centra la ventana
-    dialogoTabla.setVisible(true); // Muestra la ventana        
+        //Crea y muestra la ventana (JDialog) con la tabla
+        javax.swing.JTable tablaGUI = new javax.swing.JTable(model);
+        javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(tablaGUI);
+        javax.swing.JDialog dialogoTabla = new javax.swing.JDialog(this, "Tabla de Símbolos (Identificadores)", true);
+
+        dialogoTabla.add(scrollPane);
+        dialogoTabla.setSize(600, 400);
+        dialogoTabla.setLocationRelativeTo(this); // Centra la ventana
+        dialogoTabla.setVisible(true); // Muestra la ventana        
     }
 
     /**
@@ -295,6 +299,7 @@ public class Compilador extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jErrores = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -321,6 +326,9 @@ public class Compilador extends javax.swing.JFrame {
         jErrores.setRequestFocusEnabled(false);
         jScrollPane2.setViewportView(jErrores);
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/logo quimcode.png"))); // NOI18N
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -330,21 +338,29 @@ public class Compilador extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addGap(67, 67, 67)
+                .addGap(46, 46, 46)
                 .addComponent(jLabel1)
-                .addContainerGap(353, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(375, 375, 375)
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addComponent(jLabel1)
+                        .addGap(98, 98, 98)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -509,6 +525,7 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JTextPane jCode;
     private javax.swing.JTextPane jErrores;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
