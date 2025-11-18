@@ -279,7 +279,10 @@ public class Compilador extends javax.swing.JFrame {
                 return "Hay un carácter que no forma parte del lenguaje definido. " +
                        "Revisa si escribiste un símbolo extraño o un acento que no es válido. " +
                        "Si no lo necesitas, elimínalo o sustitúyelo por un símbolo permitido.";
-
+            case "ERROR_NUMERO_MALFORMADO":
+                return "El numero esta mal formado o tiene caracteres invalidos. "+
+                        "El numero debe estar escrito por uno o mas digitos, seguido de un punto y mas digitos" +
+                        "Ejemplo: 2.5, 3, 10.0, 0.1";
             case "ERROR":
             default:
                 return "Se encontró un símbolo no reconocido. " +

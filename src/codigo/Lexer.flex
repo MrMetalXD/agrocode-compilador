@@ -116,7 +116,7 @@ LIT_NUMERICA = {NUMERO}({UNIDAD_MOL}|{UNIDAD_GRAMOS}|{UNIDAD_KG}|{UNIDAD_L}|{UNI
 ">" { return token(yytext(),"OP_MAYOR",yyline,yycolumn); }
 "=" { return token(yytext(),"OP_ASIGN",yyline,yycolumn); }
 "&&" { return token(yytext(),"OP_AND",yyline,yycolumn); }
-"|" { return token(yytext(),"OP_OR",yyline,yycolumn); }
+"||" { return token(yytext(),"OP_OR",yyline,yycolumn); }
 "!" { return token(yytext(),"OP_NOT",yyline,yycolumn); }
 "(" { return token(yytext(),"PAREN_ABRE",yyline,yycolumn); }
 ")" { return token(yytext(),"PAREN_CIERRA",yyline,yycolumn); }
@@ -134,8 +134,8 @@ LIT_NUMERICA = {NUMERO}({UNIDAD_MOL}|{UNIDAD_GRAMOS}|{UNIDAD_KG}|{UNIDAD_L}|{UNI
 
 /*   ERRORES DE IDENTIFICADOR    */
 ({DIGITO}+{LETRA}({LETRA}|{DIGITO})*) | ({GUION_B}({DIGITO}|{GUION_B})({LETRA}|{DIGITO}|{GUION_B})*) | ({GUION_B})  { return token(yytext(), "ERROR_IDENTIFICADOR_INVALIDO", yyline, yycolumn);}
-
- /* -------- Identificadores -------- */
+([-+*/=<>!&]){LETRA}({LETRA}|{DIGITO})* { return token(yytext(), "ERROR_LEXICO", yyline, yycolumn);}
+/* -------- Identificadores -------- */
 
   {IDENTIFICADOR} {
         // Revisa la "Tabla Fija"
@@ -147,13 +147,13 @@ LIT_NUMERICA = {NUMERO}({UNIDAD_MOL}|{UNIDAD_GRAMOS}|{UNIDAD_KG}|{UNIDAD_L}|{UNI
             return token(yytext(),"IDENTIFICADOR",yyline,yycolumn);
         }             
   }
-
+ 
   /* -------- Errores léxicos comunes -------- */
   \"[^\"\n]* { return token(yytext(),"ERROR_CADENA_NO_CERRADA",yyline,yycolumn); }
   [^\s\w\[\]{}();:,.=<>+\-*/\"ÁÉÍÓÚÜÑáéíóúüñ%] { return token(yytext(),"ERROR_CARACTER_INVALIDO",yyline,yycolumn); }
 
 /* -------- Error de análisis -------- */
 . {return token(yytext(), "ERROR", yyline, yycolumn);}
-
+({ENTERO}"." ) | ("."{ENTERO}) { return token(yytext(),"ERROR_NUMERO_MALFORMADO",yyline,yycolumn); }
 
 
