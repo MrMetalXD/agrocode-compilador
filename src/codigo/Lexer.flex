@@ -140,7 +140,7 @@ LIT_NUMERICA = {NUMERO}({UNIDAD_MOL}|{UNIDAD_GRAMOS}|{UNIDAD_KG}|{UNIDAD_L}|{UNI
   {IDENTIFICADOR} {
         // Revisa la "Tabla Fija"
         if (TablaPalabrasReservadas.esReservada(yytext())){
-            return token(yytext(),"Error identificador es palabra reservada",yyline,yycolumn);
+            return token(yytext(),"ERROR_IDENTIFICADOR_ES_PALABRA_RESERVADA",yyline,yycolumn);
         } else {
             // Si no es reservada, la registra en la "Tabla de identificadores"
             tablaSimbolos.registrarIdentificador(yytext(), yyline+1, yycolumn+1);
