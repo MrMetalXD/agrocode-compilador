@@ -71,11 +71,11 @@ public class Compilador extends javax.swing.JFrame {
     }
     
     public void GuardarArchivo(){
-        JFileChooser fileChooser = new javax.swing.JFileChooser();
-        fileChooser.setDialogTitle("Guardar archivo .quim");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar archivo .ccode");
 
         // Filtro para archivos .quim
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Quim (*.quim)", "quim");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Ccode (*.ccode)", "ccode");
         fileChooser.setFileFilter(filter);
 
         int seleccion = fileChooser.showSaveDialog(this);
@@ -83,8 +83,8 @@ public class Compilador extends javax.swing.JFrame {
         if (seleccion ==  JFileChooser.APPROVE_OPTION) {
             File archivo = fileChooser.getSelectedFile();
         // Si el nombre no termina con .quim, se lo agregamos automáticamente
-            if (!archivo.getName().toLowerCase().endsWith(".quim")) {
-                archivo = new java.io.File(archivo.getAbsolutePath() + ".quim");
+            if (!archivo.getName().toLowerCase().endsWith(".ccode")) {
+                archivo = new java.io.File(archivo.getAbsolutePath() + ".ccode");
             }
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
@@ -135,10 +135,10 @@ public class Compilador extends javax.swing.JFrame {
     
     public void AbrirArchivo(){
         JFileChooser fileChooser = new javax.swing.JFileChooser();
-        fileChooser.setDialogTitle("Abrir archivo .quim");
+        fileChooser.setDialogTitle("Abrir archivo .ccode");
 
-        // 🔹 Solo archivos con extensión .quim
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Quim (*.quim)", "quim");
+        // Solo archivos con extensión .ccode
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Ccode (*.ccode)", "ccode");
         fileChooser.setFileFilter(filter);
 
         int seleccion = fileChooser.showOpenDialog(this);
@@ -147,9 +147,9 @@ public class Compilador extends javax.swing.JFrame {
                 File archivo = fileChooser.getSelectedFile();
 
             // Validar la extensión manualmente
-                if (!archivo.getName().toLowerCase().endsWith(".quim")) {
+                if (!archivo.getName().toLowerCase().endsWith(".ccode")) {
                     JOptionPane.showMessageDialog(this,
-                        "El archivo seleccionado no es compatible.\nDebe ser un archivo con extensión .quim",
+                        "El archivo seleccionado no es compatible.\nDebe ser un archivo con extensión .ccode",
                         "Archivo no compatible",
                     JOptionPane.WARNING_MESSAGE);
                     return;
@@ -272,8 +272,7 @@ public class Compilador extends javax.swing.JFrame {
 
             case "ERROR_CADENA_NO_CERRADA":
                 return "La cadena no está cerrada con comillas dobles. " +
-                       "Agrega la comilla de cierre al final, por ejemplo:\n" +
-                       "   \"" + lexema + "\"  ->  \"" + lexema + "\"\"";
+                       "Agrega la comilla de cierre al final";
 
             case "ERROR_CARACTER_INVALIDO":
                 return "Hay un carácter que no válido para el lenguaje. " +
@@ -475,21 +474,23 @@ public class Compilador extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(375, 375, 375)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(375, 375, 375)
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(98, 98, 98)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 197, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jMenuBar1.setBorder(null);
